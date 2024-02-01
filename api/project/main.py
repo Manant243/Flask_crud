@@ -281,8 +281,12 @@ def updateprofile(id):
 
 @app.route("/admin", methods=['GET', 'POST'])
 def admin():
-    users = Signup.query.filter_by(is_admin=0).all()
-    return render_template("admin.html", users=users)
+    if current_user.is_admin:
+        users = Signup.query.filter_by(is_admin=0).all()
+        return render_template("admin.html", users=users)
+    else:
+        flash("You're not a admin!!", 'warning')
+        return redirect(url_for('home'))
 
 
 @app.route("/delete/<int:id>",methods=['GET'])
